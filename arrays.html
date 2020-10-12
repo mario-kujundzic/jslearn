@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    let colors = ['blue', 'red', 'yellow', 'orange', 'purple'];
+
+    for (i = 0; i != colors.length; i++) {
+        console.log(colors[i]);
+    }
+
+    colors.forEach((c) => console.log(c));
+
+    function rotate(array, steps) {
+        for (i = 0; i != steps ; i++) {
+            var item = array.shift();
+            array.push(item);
+        }
+        return array;
+    }
+    console.log(colors);
+    rotate(colors, 2);
+    console.log(colors);
+    rotate(colors, 2);
+    console.log(colors);
+    rotate(colors, 1);
+    console.log(colors);
+    
+
+    function reduceArray(array) {
+        return array.reduce((total, num) => {
+            return total += num;
+        }, 50)
+    }
+
+    console.log(reduceArray([5, 5, 10])) // 50 + 20
+    console.log(reduceArray([10, 15, 15, 15])) // 50 + 55
+
+    function steppedArray(maxNum) {
+        let array = [];
+        let direction = 'up';
+        let currNum = 0;
+        while (true) {
+            array.push(currNum);
+            if (direction == 'up') {
+                if (currNum === maxNum) {
+                    direction = 'down';
+                    currNum--;
+                } else
+                    currNum++;
+            } else {
+                if (currNum === 0) {
+                    break;
+                }    
+                currNum--;
+            }
+        }
+        return array;
+    }
+    console.log(steppedArray(5));
+
+    console.log(steppedArray(2));
+
+    var myZoo = [
+        ["King Kong", ["gorilla", 42]],
+        ["Nemo", ["fish", 5]],
+        ["Punxsutawney Phil", ["groundhog", 11]],
+    ];
+
+    function zooInventory(zoo) {
+        let array = [];
+        zoo.forEach((animal) => {
+            array.push(animal[0] + ' the ' + animal[1][0] + ' is ' + animal[1][1]);
+        });
+        return array;
+    }
+
+    console.log(zooInventory(myZoo));
+</script>
+</body>
+</html>
