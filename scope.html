@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    const globalVar = 'I am a global variable';
+
+    function varFor() {
+        for (i = 0; i != 5 ; i++) {
+            var variable = 5;
+        }
+        console.log('VAR Value after loop:' + variable);
+    };
+
+    function letFor() {
+        for (i = 0; i != 5 ; i++) {
+            let variable = 5;
+        }
+        console.log('LET Value after loop:' + variable);
+    };
+
+    function dummy() {
+        console.log(globalVar);
+        let localVar = 'I am a local variable';
+    }
+
+
+    varFor(); // keeps value because of function scope
+    //letFor(); // throws ReferenceError because of block scope
+
+    dummy(); // logs global var and assigns localVar
+
+    //console.log(localVar); // throws ReferenceError as it can't access function scope
+
+</script>
+</body>
+</html>
