@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    numArray = [5, 1, 2, 10, 9, 6, 2];
+
+    console.log(numArray);
+
+    const newArray = numArray.map((item) => {
+        return Math.pow(item, 2);
+    });
+
+    console.log(newArray);
+
+    var iife = (function(num1, num2) {
+        console.log(num1+num2);
+    });
+
+    console.log("IIFE as callable func");
+    iife(1, 2);
+    iife(3, 4);
+    iife(5, 6);
+
+    var iife2 = (function() {
+        let num1 = 2;
+        let num2 = 2;
+        return () => console.log(num1 + num2);
+    }())
+
+    console.log("IIFE as closure");
+    iife2();
+    iife2();
+    iife2();
+
+    const timesTwo = (num) => {
+        return num * 2;
+    };
+
+    console.log("10 times two is " + timesTwo(10));
+
+</script>
+</body>
+</html>
