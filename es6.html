@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    // let vs var - defined in block
+
+    for (var i = 0; i != 5; i++) {
+        console.log("i is now " + i);
+    }
+    console.log("i after loop: " + i);
+
+    for (let j = 0; j != 5; j++) {
+        console.log("j is now " + j);
+    }
+    try {
+        console.log("j after loop: " + j);
+    } catch (ReferenceError) {
+        console.log("j is not defined anymore");
+    }
+
+    // let vs var - defined before block
+    console.log("-----var variable in block------");
+    var k = 'i am defined before the block';
+    console.log('var before block');
+    console.log(k);
+    {
+        console.log('var in block');
+        var k = 'i am defined in the block';
+        console.log(k);
+    }
+    console.log('var after block');
+    console.log(k);
+
+    console.log("-----let variable in block-----");
+    let l = 'i am defined before the block'
+    console.log('let before block');
+    console.log(l);
+    {
+        console.log('let in block');
+        let l = 'i am defined in the block';
+        console.log(l);
+    }
+    console.log('let after block');
+    console.log(l);
+
+    // classes vs class functions
+    {
+        class Shape {
+            constructor (id, x, y) {
+                this.id = id;
+                this.move(x,y);
+            };
+            move (x, y) {
+                this.x = x;
+                this.y = y;
+            };
+            toString() {
+                return 'Shape(new) - id:' + this.id + ', x:' + this.x + ', y:' + this.y;
+            }
+        }
+
+        let shapeNew = new Shape(1, 2, 4);
+        console.log('Shape is: ' + shapeNew);
+    }
+    {
+        var Shape = function (id, x, y) {
+            this.id = id;
+            this.move(x, y);
+        };
+        Shape.prototype.move = function(x, y) {
+            this.x = x;
+            this.y = y;
+        };
+        Shape.prototype.toString = function() {
+            return 'Shape(old) - id:' + this.id + ', x:' + this.x + ', y:' + this.y;
+        }
+
+        let shapeOld = new Shape(2, 4, 6);
+        console.log('Shape is: ' + shapeOld);
+    }
+
+    // arrow functions vs es5 functions
+
+    window.variable = 'from window';
+    function testOld() {
+        this.variable = 'from function';
+        setTimeout(function() {
+            console.log('Variable value is ' + this.variable);
+        }, 100);
+    }
+    var test = new testOld();
+
+    function testNew() {
+        this.variable = 'from function';
+        setTimeout(() => {
+            console.log('Variable value is ' + this.variable);
+        }, 100);
+    }
+    var test2 = new testNew();
+
+    // promises with await async and promise.then
+
+    var myPromise1 = new Promise((resolve, reject) => {
+        setTimeout(() => resolve('I am middle step!'), 1000);
+    });
+
+    var myPromise2 = new Promise((resolve, reject) => {
+        setTimeout(() => resolve('I am resolved fully!', 1000));
+    })
+
+    myPromise1.then((msg) => {
+        console.log(msg);
+        myPromise2.then((msg2) => {
+            console.log(msg2);
+        })
+    })
+
+    async function myCaller() {
+        var p = await myPromise1;
+        console.log(p);
+        var x = await myPromise2;
+        return x;
+    }
+
+    myCaller().then((msg) => {
+        console.log(msg)
+    })
+
+</script>
+</body>
+</html>
