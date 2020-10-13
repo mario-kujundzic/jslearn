@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    function myPromise(success) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                if (success)
+                    resolve("Success!");
+                else
+                    reject("Error!");
+            }, 1000)
+        })
+    };
+
+    myPromise(true).then((msg) => {
+        console.log(msg);
+    })
+
+    myPromise(false).then((msg) => {
+        console.log(msg);
+    }).catch((err) => {
+        console.log(err);
+    })
+    // promise executes after a random time between 0-2
+    function arrPromise(num) {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(num);
+            }, Math.random()*2000)
+        })
+    }
+    // sequentually add and then call each promise with cleanup code after
+    let promises = [];
+    for (var i = 0; i != 10; i++) {
+        promises.push(arrPromise(i));
+    }
+
+    for (var i = 0; i != 10; i++) {
+        promises[i].then((num)=> {console.log(num)})
+    }
+    console.log('All promises done (but are they tho)');
+
+    
+    // wait for all promises to finish before cleanup code
+/*
+    let promiseArray = [];
+    for (var i = 0; i != 10; i++) {
+        promiseArray.push(arrPromise(i).then((num) => console.log(num)));
+    }
+    Promise.all(promiseArray).then((num) => {
+        console.log('All promises done (now they actually are)');
+    });
+*/
+
+
+</script>
+</body>
+</html>
