@@ -46,8 +46,10 @@
 
         obaviPregled(id) {
             let pregled = this.pregledi.find(p => p.id == id);
+            if (!pregled)
+                throw new Error('Pregled nije pronadjen!')
             if (pregled.zavrsen)
-                throw new Error("Pregled je vec zavrsen!");
+                throw new Error('Pregled je vec zavrsen!');
             pregled.zavrsi();
             console.log(pregled.toString());
         }
