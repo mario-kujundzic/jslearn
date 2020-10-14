@@ -17,6 +17,7 @@
             this.prezime = prezime;
             this.specijalnost = specijalnost;
             this.pacijenti = [];
+            console.log('Kreiranje doktora - ' + this.ime + ' ' + this.prezime);
         }
 
         zakaziPregled(pacijent, tipPregleda) {
@@ -33,11 +34,14 @@
             this.brZdravKart = brZdravKart;
             this.doktor = null;
             this.pregledi = [];
+            console.log('Kreiranje pacijenta - ' + this.ime + ' ' + this.prezime);
         }
 
         izaberiDoktora(doktor) {
             this.doktor = doktor;
             this.doktor.pacijenti.push(self);
+            console.log('Pacijent ' + this.ime + ' ' + this.prezime + ' bira doktora ' +
+                    doktor.ime + ' ' + doktor.prezime);
         }
 
         obaviPregled(id) {
@@ -147,7 +151,7 @@
 
     pacijent.obaviPregled(1);
 
-    
+
 </script>
 </body>
 </html>
