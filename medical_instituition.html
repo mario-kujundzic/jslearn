@@ -3,6 +3,14 @@
 <body>
     
 <script>
+    // helper funkcija za random vrednosti
+    function rand(range, start) {
+        return Math.round(Math.random()*range+start);
+    }
+    
+    // model
+    
+
     class Doktor {
         constructor (ime, prezime, specijalnost) {
             this.ime = ime;
@@ -13,7 +21,7 @@
 
         zakaziPregled(pacijent, tipPregleda) {
             pacijent.pregledi.push(new tipPregleda(
-                (Math.random()*5+19) + '-Okt-2020', (Math.random()*2 + 7) + 'h'));
+                (rand(5,19)) + '-Okt-2020', (rand(2,7)) + 'h'));
         }
     }
 
@@ -29,22 +37,15 @@
 
         izaberiDoktora(doktor) {
             this.doktor = doktor;
+            this.doktor.pacijenti.push(self);
         }
 
         obaviPregled(id) {
             let pregled = this.pregledi.find(p => p.id == id);
-            if (pregled instanceof PregledKrvnogPritiska) {
-                pregled.zavrsi(Math.random()*10+10, Math.random()*10, Math.random*50+90);
-            }
-            else if (pregled instanceof PregledSecer) {
-                pregled.zavrsi(Math.random()*5+5, '18h');
-            }
-            else if (pregled instanceof PregledHolesterol) {
-                pregled.zavrsi(Math.random()*5+10, '18h');
-            }
-            else {
-                throw new Error("This shouldn't happen!");
-            }
+            if (pregled.zavrsen)
+                throw new Error("Pregled je vec zavrsen!");
+            pregled.zavrsi();
+            console.log(pregled.toString());
         }
     }
 
@@ -56,6 +57,11 @@
             Pregled.#nextId++;
             this.datum = datum;
             this.vreme = vreme;
+            this.zavrsen = false;
+        }
+        
+        zavrsi() {
+            this.zavrsen = true;
         }
     }
 
@@ -65,14 +71,13 @@
             this.gornja_vr = null;
             this.donja_vr = null;
             this.puls = null;
-            this.zavrsen = false;
         }
 
-        zavrsi(gornja_vr, donja_vr, puls) {
-            this.gornja_vr = gornja_vr;
-            this.donja_vr = donja_vr;
-            this.puls = puls;
-            this.zavrsen = true;
+        zavrsi() {
+            super.zavrsi();
+            this.gornja_vr = rand(10, 10);
+            this.donja_vr = rand(10, 0);
+            this.puls = rand(50, 90);
         }
 
         toString() {
@@ -92,10 +97,10 @@
             this.zavrsen = false;
         }
 
-        zavrsi(vrednost, poslednji_obrok) {
-            this.vrednost = vrednost;
-            this.poslednji_obrok = poslednji_obrok;
-            this.zavrsen = true;
+        zavrsi() {
+            super.zavrsi();
+            this.vrednost = rand(5,5);
+            this.poslednji_obrok = '18h';
         }
         toString() {
             return this.zavrsen ? 
@@ -111,13 +116,12 @@
             super(datum, vreme);
             this.vrednost = null;
             this.poslednji_obrok = null;
-            this.zavrsen = false;
         }
 
-        zavrsi(vrednost, poslednji_obrok) {
-            this.vrednost = vrednost;
-            this.poslednji_obrok = poslednji_obrok;
-            this.zavrsen = true;
+        zavrsi() {
+            super.zavrsi();
+            this.vrednost = rand(5,10);
+            this.poslednji_obrok = '18h';
         }
         toString() {
             return this.zavrsen ? 
@@ -127,6 +131,23 @@
                 "Pregled holesterola u krvi - nije jos poceo";
         }
     }
+
+    // script
+
+    let doktor = new Doktor('Milan', 'Mladenovic', 'Opsta praksa');
+    let pacijent = new Pacijent('Dragan', 'Mijatovic', '2332233323513', '532153234');
+
+    pacijent.izaberiDoktora(doktor);
+
+    doktor.zakaziPregled(pacijent, PregledSecer);
+
+    doktor.zakaziPregled(pacijent, PregledKrvnogPritiska);
+
+    pacijent.obaviPregled(0);
+
+    pacijent.obaviPregled(1);
+
+    
 </script>
 </body>
 </html>
