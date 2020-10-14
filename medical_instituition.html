@@ -8,6 +8,20 @@
         return Math.round(Math.random()*range+start);
     }
     
+    // helper funkcija za formatiranje datuma
+    // format: DD.MM.YYYY hh:mm
+    function dateFormatter(dateTime) {
+        let date = dateTime.getDate() + '.' + dateTime.getMonth()+1 + '.' +
+                   dateTime.getFullYear() + '.';
+        let time = dateTime.getHours() + ":" + dateTime.getMinutes();
+        return date + ' ' + time;
+    }
+
+    // helper funkcija za log messages
+    function logCreator(dateTime, message) {
+        return `[${dateFormatter(dateTime)}] ${message}`;
+    }
+
     // model
     
 
@@ -17,12 +31,11 @@
             this.prezime = prezime;
             this.specijalnost = specijalnost;
             this.pacijenti = [];
-            console.log('Kreiranje doktora - ' + this.ime + ' ' + this.prezime);
+            console.log(logCreator(new Date(), `Kreiran doktor ${ime} ${prezime}`));
         }
 
         zakaziPregled(pacijent, tipPregleda) {
-            pacijent.pregledi.push(new tipPregleda(
-                (rand(5,19)) + '-Okt-2020', (rand(2,7)) + 'h'));
+            pacijent.pregledi.push(new tipPregleda(new Date()));
         }
     }
 
@@ -34,14 +47,14 @@
             this.brZdravKart = brZdravKart;
             this.doktor = null;
             this.pregledi = [];
-            console.log('Kreiranje pacijenta - ' + this.ime + ' ' + this.prezime);
+            console.log(logCreator(new Date(), `Kreiran pacijent ${ime} ${prezime}`));
         }
 
         izaberiDoktora(doktor) {
             this.doktor = doktor;
             this.doktor.pacijenti.push(self);
-            console.log('Pacijent ' + this.ime + ' ' + this.prezime + ' bira doktora ' +
-                    doktor.ime + ' ' + doktor.prezime);
+            console.log(logCreator(new Date(), 
+                        `Pacijent ${this.ime} bira doktora ${doktor.ime}`));
         }
 
         obaviPregled(id) {
@@ -51,18 +64,17 @@
             if (pregled.zavrsen)
                 throw new Error('Pregled je vec zavrsen!');
             pregled.zavrsi();
-            console.log(pregled.toString());
+            console.log(logCreator(new Date(), pregled.toString()));
         }
     }
 
     class Pregled {
         static #nextId = 0;
-        constructor(datum, vreme) {
+        constructor(datum) {
             if (new.target == Pregled) throw new Error('Napravi konkretan pregled!');
             this.id = Pregled.#nextId;
             Pregled.#nextId++;
             this.datum = datum;
-            this.vreme = vreme;
             this.zavrsen = false;
         }
         
@@ -72,8 +84,8 @@
     }
 
     class PregledKrvnogPritiska extends Pregled {
-        constructor(datum, vreme) {
-            super(datum, vreme);
+        constructor(datum) {
+            super(datum);
             this.gornja_vr = null;
             this.donja_vr = null;
             this.puls = null;
@@ -88,16 +100,17 @@
 
         toString() {
             return this.zavrsen ? 
-                "Pregled krvnog pritiska - gornja vrednost: " + this.gornja_vr +
-                    ", donja vrednost: " + this.donja_vr + ", puls: " + this.puls
+                `Pregled krvnog pritiska (${dateFormatter(this.datum)}) ` +
+                    `- gornja vrednost: ${this.gornja_vr},` +
+                    `donja vrednost: ${this.donja_vr}, puls: ${this.puls}`
                 : 
                 "Pregled krvnog pritiska - nije jos poceo";
         }
     }
 
     class PregledSecer extends Pregled {
-        constructor(datum, vreme) {
-            super(datum, vreme);
+        constructor(datum) {
+            super(datum);
             this.vrednost = null;
             this.poslednji_obrok = null;
             this.zavrsen = false;
@@ -110,16 +123,17 @@
         }
         toString() {
             return this.zavrsen ? 
-                "Pregled secera u krvi - vrednost: " + this.vrednost +
-                    ", poslednji obrok: " + this.poslednji_obrok
+                `Pregled secera u krvi (${dateFormatter(this.datum)}) ` +
+                    `- vrednost: ${this.vrednost}, ` +
+                    `poslednji obrok: ${this.poslednji_obrok}`
                 : 
                 "Pregled secera u krvi - nije jos poceo";
         }
     }
 
     class PregledHolesterol extends Pregled {
-        constructor(datum, vreme) {
-            super(datum, vreme);
+        constructor(datum) {
+            super(datum);
             this.vrednost = null;
             this.poslednji_obrok = null;
         }
@@ -131,8 +145,9 @@
         }
         toString() {
             return this.zavrsen ? 
-                "Pregled holesterola u krvi - vrednost: " + this.vrednost +
-                    ", poslednji obrok: " + this.poslednji_obrok
+                `Pregled secera u krvi (${dateFormatter(this.datum)})` +
+                    `- vrednost: ${this.vrednost},` + 
+                    `poslednji obrok: ${this.poslednji_obrok}`
                 : 
                 "Pregled holesterola u krvi - nije jos poceo";
         }
