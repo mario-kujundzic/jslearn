@@ -34,8 +34,8 @@
             console.log(logCreator(new Date(), `Kreiran doktor ${ime} ${prezime}`));
         }
 
-        zakaziPregled(pacijent, tipPregleda) {
-            pacijent.pregledi.push(new tipPregleda(new Date()));
+        zakaziPregled(pacijent, pregled) {
+            pacijent.pregledi.push(pregled);
         }
     }
 
@@ -119,13 +119,13 @@
         zavrsi() {
             super.zavrsi();
             this.vrednost = rand(5,5);
-            this.poslednji_obrok = '18h';
+            this.poslednji_obrok = new Date();
         }
         toString() {
             return this.zavrsen ? 
                 `Pregled secera u krvi (${dateFormatter(this.datum)}) ` +
                     `- vrednost: ${this.vrednost}, ` +
-                    `poslednji obrok: ${this.poslednji_obrok}`
+                    `poslednji obrok: ${dateFormatter(this.poslednji_obrok)}`
                 : 
                 "Pregled secera u krvi - nije jos poceo";
         }
@@ -141,13 +141,13 @@
         zavrsi() {
             super.zavrsi();
             this.vrednost = rand(5,10);
-            this.poslednji_obrok = '18h';
+            this.poslednji_obrok = new Date();
         }
         toString() {
             return this.zavrsen ? 
                 `Pregled secera u krvi (${dateFormatter(this.datum)})` +
                     `- vrednost: ${this.vrednost},` + 
-                    `poslednji obrok: ${this.poslednji_obrok}`
+                    `poslednji obrok: ${dateFormatter(this.poslednji_obrok)}`
                 : 
                 "Pregled holesterola u krvi - nije jos poceo";
         }
@@ -160,13 +160,17 @@
 
     pacijent.izaberiDoktora(doktor);
 
-    doktor.zakaziPregled(pacijent, PregledSecer);
+    let pregledSecer = new PregledSecer(new Date());
 
-    doktor.zakaziPregled(pacijent, PregledKrvnogPritiska);
+    doktor.zakaziPregled(pacijent, pregledSecer);
 
-    pacijent.obaviPregled(0);
+    let pregledPritisak = new PregledKrvnogPritiska(new Date());
 
-    pacijent.obaviPregled(1);
+    doktor.zakaziPregled(pacijent, pregledPritisak);
+
+    pacijent.obaviPregled(pregledSecer.id);
+
+    pacijent.obaviPregled(pregledPritisak.id);
 
 
 </script>
