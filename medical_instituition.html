@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    class Doktor {
+        constructor (ime, prezime, specijalnost) {
+            this.ime = ime;
+            this.prezime = prezime;
+            this.specijalnost = specijalnost;
+            this.pacijenti = [];
+        }
+
+        zakaziPregled(pacijent, tipPregleda) {
+            pacijent.pregledi.push(new tipPregleda(
+                (Math.random()*5+19) + '-Okt-2020', (Math.random()*2 + 7) + 'h'));
+        }
+    }
+
+    class Pacijent {
+        constructor (ime, prezime, jmbg, brZdravKart) {
+            this.ime = ime;
+            this.prezime = prezime;
+            this.jmbg = jmbg;
+            this.brZdravKart = brZdravKart;
+            this.doktor = null;
+            this.pregledi = [];
+        }
+
+        izaberiDoktora(doktor) {
+            this.doktor = doktor;
+        }
+
+        obaviPregled(id) {
+            let pregled = this.pregledi.find(p => p.id == id);
+            if (pregled instanceof PregledKrvnogPritiska) {
+                pregled.zavrsi(Math.random()*10+10, Math.random()*10, Math.random*50+90);
+            }
+            else if (pregled instanceof PregledSecer) {
+                pregled.zavrsi(Math.random()*5+5, '18h');
+            }
+            else if (pregled instanceof PregledHolesterol) {
+                pregled.zavrsi(Math.random()*5+10, '18h');
+            }
+            else {
+                throw new Error("This shouldn't happen!");
+            }
+        }
+    }
+
+    class Pregled {
+        static #nextId = 0;
+        constructor(datum, vreme) {
+            if (new.target == Pregled) throw new Error('Napravi konkretan pregled!');
+            this.id = Pregled.#nextId;
+            Pregled.#nextId++;
+            this.datum = datum;
+            this.vreme = vreme;
+        }
+    }
+
+    class PregledKrvnogPritiska extends Pregled {
+        constructor(datum, vreme) {
+            super(datum, vreme);
+            this.gornja_vr = null;
+            this.donja_vr = null;
+            this.puls = null;
+            this.zavrsen = false;
+        }
+
+        zavrsi(gornja_vr, donja_vr, puls) {
+            this.gornja_vr = gornja_vr;
+            this.donja_vr = donja_vr;
+            this.puls = puls;
+            this.zavrsen = true;
+        }
+
+        toString() {
+            return this.zavrsen ? 
+                "Pregled krvnog pritiska - gornja vrednost: " + this.gornja_vr +
+                    ", donja vrednost: " + this.donja_vr + ", puls: " + this.puls
+                : 
+                "Pregled krvnog pritiska - nije jos poceo";
+        }
+    }
+
+    class PregledSecer extends Pregled {
+        constructor(datum, vreme) {
+            super(datum, vreme);
+            this.vrednost = null;
+            this.poslednji_obrok = null;
+            this.zavrsen = false;
+        }
+
+        zavrsi(vrednost, poslednji_obrok) {
+            this.vrednost = vrednost;
+            this.poslednji_obrok = poslednji_obrok;
+            this.zavrsen = true;
+        }
+        toString() {
+            return this.zavrsen ? 
+                "Pregled secera u krvi - vrednost: " + this.vrednost +
+                    ", poslednji obrok: " + this.poslednji_obrok
+                : 
+                "Pregled secera u krvi - nije jos poceo";
+        }
+    }
+
+    class PregledHolesterol extends Pregled {
+        constructor(datum, vreme) {
+            super(datum, vreme);
+            this.vrednost = null;
+            this.poslednji_obrok = null;
+            this.zavrsen = false;
+        }
+
+        zavrsi(vrednost, poslednji_obrok) {
+            this.vrednost = vrednost;
+            this.poslednji_obrok = poslednji_obrok;
+            this.zavrsen = true;
+        }
+        toString() {
+            return this.zavrsen ? 
+                "Pregled holesterola u krvi - vrednost: " + this.vrednost +
+                    ", poslednji obrok: " + this.poslednji_obrok
+                : 
+                "Pregled holesterola u krvi - nije jos poceo";
+        }
+    }
+</script>
+</body>
+</html>
