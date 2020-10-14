@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<body>
+    
+<script>
+    // classes
+    /*
+    class Character {
+        constructor(x, y) {
+            if (new.target === Character) {
+                throw new TypeError("Cannot construct abstract class Character");
+            }
+            this.x = Math.round(Math.random()*10);
+            this.y = Math.round(Math.random()*10);
+        }
+
+        set xy ([newx, newy]) {
+            if (newx > 10 || newx < 0) {
+                throw new RangeError("X must be in range 0-10");
+            }
+            if (newy > 10 || newy < 0) {
+                throw new RangeError("Y must be in range 0-10");
+            }
+            this.x = newx;
+            this.y = newy;
+        }
+    }
+
+
+    class PlayerCharacter extends Character {
+        static #counter = 0;
+
+        constructor() {
+            super();
+            PlayerCharacter.#counter++;
+        }
+        toString() {
+            return "Player Character at x:" + this.x + ", y:" + this.y;
+        }
+        static count() {
+            return this.#counter;
+        }
+
+    }
+
+    class NonPlayerCharacter extends Character {
+        static #counter = 0;
+        constructor() {
+            super();
+            NonPlayerCharacter.#counter++;
+        }
+        toString() {
+            return "Non-Player Character at x:" + this.x + ", y:" + this.y;
+        }
+        static count() {
+            return this.#counter;
+        }
+    }
+    */
+    // prototypes
+    function Character() {
+        if (new.target === Character) {
+            throw new TypeError("Cannot construct abstract class Character");
+        }
+        this.x = Math.round(Math.random()*10);
+        this.y = Math.round(Math.random()*10);
+    }
+
+    Character.prototype.xy = function([newx, newy]) {
+        if (newx > 10 || newx < 0) {
+            throw new RangeError("X must be in range 0-10");
+        }
+        if (newy > 10 || newy < 0) {
+            throw new RangeError("Y must be in range 0-10");
+        }
+        this.x = newx;
+        this.y = newy;
+    }
+
+    function PlayerCharacter() {
+        Character.call(this);
+        PlayerCharacter.counter++;
+    }
+
+    PlayerCharacter.prototype = Object.create(Character.prototype);
+    PlayerCharacter.prototype.constructor = PlayerCharacter;
+    PlayerCharacter.counter = 0;
+    PlayerCharacter.prototype.toString = function() {
+        return "Player Character at x:" + this.x + ", y:" + this.y;
+    }
+    PlayerCharacter.count = function() { return PlayerCharacter.counter};
+
+    function NonPlayerCharacter() {
+        Character.call(this);
+        NonPlayerCharacter.counter++;
+    }
+
+    NonPlayerCharacter.prototype = Object.create(Character.prototype);
+    NonPlayerCharacter.prototype.constructor = NonPlayerCharacter;
+    NonPlayerCharacter.counter = 0;
+    NonPlayerCharacter.prototype.toString = function() {
+        return "Non-Player Character at x:" + this.x + ", y:" + this.y;
+    }
+    NonPlayerCharacter.count = function() { return NonPlayerCharacter.counter};
+
+
+    // test method
+
+    console.log('NPC Count: ' + NonPlayerCharacter.count());
+    console.log('Player count: ' + PlayerCharacter.count());
+
+    let npc1 = new NonPlayerCharacter();
+    console.log(npc1.toString());
+    console.log(npc1);
+    let npc2 = new NonPlayerCharacter();
+    console.log(npc2.toString());
+    let npc3 = new NonPlayerCharacter();
+    console.log(npc3.toString());
+    let pc1 = new PlayerCharacter();
+    console.log(pc1.toString());
+    let pc2 = new PlayerCharacter();
+    console.log(pc2.toString());
+    
+    console.log('NPC Count: ' + NonPlayerCharacter.count());
+    console.log('Player count: ' + PlayerCharacter.count());
+
+    npc3.xy([10, 0]);
+    console.log(npc3);
+
+</script>
+</body>
+</html>
